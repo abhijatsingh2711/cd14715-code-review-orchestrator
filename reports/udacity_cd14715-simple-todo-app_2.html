@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Review Report</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #f8f9fa;
+      color: #212529;
+    }
+    h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 12px; }
+    .summary {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 24px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+    .metric { text-align: center; }
+    .metric-value { font-size: 2em; font-weight: bold; color: #3498db; }
+    .metric-label { color: #6c757d; font-size: 0.9em; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 12px; margin: 8px 0; border-radius: 4px; background: white; }
+    .rec-critical { border-left: 4px solid #e74c3c; }
+    .rec-high { border-left: 4px solid #f39c12; }
+    .rec-medium { border-left: 4px solid #3498db; }
+    .rec-low { border-left: 4px solid #27ae60; }
+    .priority { font-weight: bold; margin-right: 8px; }
+    .rec-critical .priority { color: #e74c3c; }
+    .rec-high .priority { color: #f39c12; }
+    .rec-medium .priority { color: #3498db; }
+    .rec-low .priority { color: #27ae60; }
+    footer { text-align: center; color: #6c757d; margin-top: 32px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Code Review Report</h1>
+  
+  <div class="summary">
+    <div class="metric">
+      <div class="metric-value">28</div>
+      <div class="metric-label">Overall Score</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">1</div>
+      <div class="metric-label">Files Reviewed</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">3</div>
+      <div class="metric-label">Critical Issues</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">6</div>
+      <div class="metric-label">Tests Needed</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">5</div>
+      <div class="metric-label">Refactorings</div>
+    </div>
+  </div>
+
+  <h2>🎯 Top Recommendations</h2>
+  <ul>
+      <li class="rec-critical">
+        <span class="priority">[CRITICAL]</span>
+        <strong>Security - SQL Injection</strong>: All three new search functions (searchTodos, searchTodosByStatus, getTodosByUser) use vulnerable string interpolation/concatenation instead of parameterized queries. This allows attackers to execute arbitrary SQL commands, potentially compromising the entire database. Replace all instances with parameterized queries using the $1, $2 placeholder syntax that the existing CRUD functions already demonstrate.
+        <br><small>Files: src/todo.ts</small>
+      </li>
+    
+      <li class="rec-critical">
+        <span class="priority">[CRITICAL]</span>
+        <strong>Test Coverage</strong>: No test file exists for todo.ts, leaving all three SQL injection vulnerabilities untested. Create a comprehensive test suite (src/todo.test.ts) that specifically tests for SQL injection attempts in searchTodos, searchTodosByStatus, and getTodosByUser with malicious inputs like '; DROP TABLE todos; --, '1 OR 1=1', and quote-based attacks.
+        <br><small>Files: src/todo.ts</small>
+      </li>
+    
+      <li class="rec-high">
+        <span class="priority">[HIGH]</span>
+        <strong>Type Safety</strong>: The searchTodosByStatus function accepts a string parameter for 'completed' when it semantically represents a boolean value. This weakens type safety and increases the injection attack surface. Change the parameter type to boolean and update any calling code to pass true/false instead of string values.
+        <br><small>Files: src/todo.ts</small>
+      </li>
+    
+      <li class="rec-high">
+        <span class="priority">[HIGH]</span>
+        <strong>Input Validation</strong>: The new search functions lack input validation before processing user-supplied parameters. Add validation to check for empty strings, null values, and appropriate types before executing database queries. This creates defense-in-depth even after SQL injection vulnerabilities are fixed.
+        <br><small>Files: src/todo.ts</small>
+      </li>
+    
+      <li class="rec-high">
+        <span class="priority">[HIGH]</span>
+        <strong>Test Coverage - Security Functions</strong>: The security-critical functions validateTodoInput and sanitizeInput have no test coverage despite being essential for preventing XSS attacks and ensuring data integrity. Add tests covering edge cases: boundary values (200/1000 chars), HTML special characters, entity sequences, and Unicode handling.
+        <br><small>Files: src/todo.ts</small>
+      </li>
+    </ul>
+
+  <footer>
+    Generated at 2026-10-28T18:23:00.490Z • Duration: 129723ms
+  </footer>
+</body>
+</html>

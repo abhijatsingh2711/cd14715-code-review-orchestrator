@@ -1,0 +1,34 @@
+{
+  "pullRequest": {
+    "owner": "octocat",
+    "repo": "Hello-World",
+    "number": 1
+  },
+  "fileReviews": [],
+  "summary": {
+    "totalFiles": 0,
+    "overallScore": 100,
+    "criticalIssues": 0,
+    "highPriorityTests": 0,
+    "refactoringOpportunities": 0
+  },
+  "recommendations": [
+    {
+      "priority": "low",
+      "category": "Scope",
+      "description": "This PR only modifies a README file with no JavaScript/TypeScript code changes. No code quality, test coverage, or refactoring analysis was required.",
+      "files": [
+        "README"
+      ]
+    }
+  ],
+  "metadata": {
+    "analyzedAt": "2026-10-28T17:56:09.732Z",
+    "duration": 24799,
+    "agentVersions": {
+      "code-quality-analyzer": "inherit",
+      "test-coverage-analyzer": "inherit",
+      "refactoring-suggester": "inherit"
+    }
+  }
+}
