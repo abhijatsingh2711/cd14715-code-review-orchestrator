@@ -252,7 +252,10 @@ describe('CodeReviewOrchestrator', () => {
       expect(allowedTools).toContain('mcp__eslint');
 
       // Structured output enforces the report JSON Schema
-      expect(options.outputFormat).toBeUndefined();
+      expect(options.outputFormat).toEqual({
+        type: 'json_schema',
+        schema: ReviewReportJSONSchema
+      });
     });
 
     it('should spawn all 3 subagents in parallel', async () => {

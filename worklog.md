@@ -19,3 +19,8 @@
 - Debug artifacts removed (probe-mcp.ts, api_test*.json, lint/test/smoke logs).
 - `.env` confirmed git-ignored; GitHub PAT to be revoked after final runs.
 - `npm run lint` EXIT 0; `npx vitest run` EXIT 0 (23/23) after all patches.
+
+## Session Log — 2026-10-29: specification review fixes
+
+1. Removed the permission-bypass options from runQuery(). Tool access is now granted strictly through the allowedTools allowlist (Task, Read, Write, Glob, Grep, Skill, mcp__github, mcp__eslint), per the no-bypass requirement.
+2. Restored SDK-level structured output enforcement via the outputFormat option with ReviewReportJSONSchema, working alongside runtime ReviewReportSchema.safeParse() validation instead of replacing it. Updated tests/orchestrator.test.ts to assert the schema object.

@@ -1,7 +1,7 @@
 import { query } from '@anthropic-ai/claude-agent-sdk';
 import type { SDKResultMessage } from '@anthropic-ai/claude-agent-sdk';
 import type { ReviewReport } from './types/report-types.js';
-import { ReviewReportSchema } from './types/report-types.js';
+import { ReviewReportSchema, ReviewReportJSONSchema } from './types/report-types.js';
 import { mcpServersConfig } from './config/mcp.config.js';
 import { buildOrchestratorPrompt } from './prompts/index.js';
 import {
@@ -156,8 +156,6 @@ export class CodeReviewOrchestrator {
         model: this.model || process.env.ANTHROPIC_MODEL,
         maxTurns: this.maxTurns,
         maxBudgetUsd: this.maxBudgetUsd,
-        permissionMode: 'bypassPermissions',
-        allowDangerouslySkipPermissions: true,
         settingSources: ['project'],
         allowedTools: [
           'Task',
@@ -170,6 +168,10 @@ export class CodeReviewOrchestrator {
           'mcp__eslint'
         ],
         mcpServers: mcpServersConfig,
+        outputFormat: {
+          type: 'json_schema',
+          schema: ReviewReportJSONSchema
+        },
         agents: {
           'code-quality-analyzer': codeQualityAnalyzer,
           'test-coverage-analyzer': testCoverageAnalyzer,
